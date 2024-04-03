@@ -14,7 +14,7 @@ loader.load(modelUrl, function (gltf) {
     model = gltf.scene;
     initialRotation = model.rotation.clone(); // Store initial rotation
 
-    model.scale.set(0.6, 0.6, 0.6); // Adjust scale to reduce the size of the model further
+    model.scale.set(0.4, 0.4, 0.4); // Adjust scale to reduce the size of the model further
     model.rotation.set(1, 0, 0.1); // Set initial rotation
     app.scene.add(model);
 
