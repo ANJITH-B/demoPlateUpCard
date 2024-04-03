@@ -1,0 +1,11 @@
+Model Information:
+* title:	Black Credit Card
+* source:	https://sketchfab.com/3d-models/black-credit-card-1bb98aba33114a0883e494bf20849cc0
+* author:	Jawad Ahmed (https://sketchfab.com/jawadahmed15050)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Black Credit Card" (https://sketchfab.com/3d-models/black-credit-card-1bb98aba33114a0883e494bf20849cc0) by Jawad Ahmed (https://sketchfab.com/jawadahmed15050) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

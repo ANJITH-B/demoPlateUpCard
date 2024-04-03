@@ -1,0 +1,7 @@
+1. Extract the contents to a folder.
+2. Run: npm install
+3. Run: npm run dev
+
+You will need to import your own .gltf file and reference the file name and location in js/app.js
+
+https://designcourse.com use code "UI2023" for 23% off any courses.
