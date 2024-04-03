@@ -4,7 +4,7 @@ import Threeasy from "threeasy";
 
 const app = new Threeasy(THREE, { alpha: true });
 const loader = new GLTFLoader();
-const modelUrl = './card/plateUp.gltf';
+const modelUrl = './black_credit_card/plateUp.gltf';
 
 let model;
 let initialRotation;
