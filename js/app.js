@@ -3,84 +3,94 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import Threeasy from "threeasy";
 
 const app = new Threeasy(THREE, { alpha: true });
-
 const loader = new GLTFLoader();
-const modelUrl = './black_credit_card/scene.gltf';
+const modelUrl = './card/plateUp.gltf';
 
 let model;
+let initialRotation;
 
-// Inside the loader callback function
-// Inside the loader callback function
-// Inside the loader callback function// Inside the loader callback function
 loader.load(modelUrl, function (gltf) {
-  model = gltf.scene;
-  console.log(model);
 
-  // Adjust scale to reduce the size of the model further
-  model.scale.set(-0.01, -0.01, -0.01);
+    model = gltf.scene;
+    initialRotation = model.rotation.clone(); // Store initial rotation
 
-  // Set initial rotation
-  model.rotation.set(1, 0.4, 0);
+    model.scale.set(0.6, 0.6, 0.6); // Adjust scale to reduce the size of the model further
+    model.rotation.set(1, 0, 0.1); // Set initial rotation
+    app.scene.add(model);
 
-  app.scene.add(model);
+    updateModelRotation();
 
-  window.addEventListener('scroll', onScroll);
+    function updateModelRotation() {
+        const rotationSpeed = 0.0005;
+        model.rotation.z += rotationSpeed;
+        requestAnimationFrame(updateModelRotation);
+    }
 
-  function onScroll() {
-      const scrollY = window.scrollY;
-      const rotationSpeed = 0.001;
-      model.rotation.x = scrollY * rotationSpeed;
-      model.rotation.y = scrollY * rotationSpeed;
-  }
-  
-  // Add click and mouseup event listeners to the renderer's DOM element
-  app.renderer.domElement.addEventListener('click', onClick);
-  app.renderer.domElement.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('scroll', onScroll);
 
-  function onClick(event) {
-      // Stop propagation of click event to prevent it from affecting scroll
-      event.stopPropagation();
+    function onScroll() {
+        const scrollY = window.scrollY;
+        const rotationSpeed = 0.001;
+        model.rotation.x = scrollY * rotationSpeed;
+        model.rotation.y = scrollY * rotationSpeed;
+    }
 
-      // Log to check if the click event is triggered
-      console.log("Model clicked");
+    // Dragging functionality
+    let isDragging = false;
+    let previousMousePosition = {
+        x: 0,
+        y: 0
+    };
 
-      // Add mouse move event listener
-      window.addEventListener('mousemove', onMouseMove);
-  }
+    function onMouseMove(event) {
+        const deltaMove = {
+            x: event.clientX - previousMousePosition.x,
+            y: event.clientY - previousMousePosition.y
+        };
 
-  function onMouseMove(event) {
-      // Calculate rotation angles based on mouse movement
-      const rotationSpeed = 0.01;
-      model.rotation.y += event.movementX * rotationSpeed;
-      model.rotation.x += event.movementY * rotationSpeed;
-  }
+        if (isDragging) {
+            const deltaRotationQuaternion = new THREE.Quaternion()
+                .setFromEuler(new THREE.Euler(
+                    toRadians(deltaMove.y * 1),
+                    toRadians(deltaMove.x * 1),
+                    0,
+                    'XYZ'
+                ));
 
-  function onMouseUp() {
-      // Remove mouse move event listener
-      window.removeEventListener('mousemove', onMouseMove);
+            model.quaternion.multiplyQuaternions(deltaRotationQuaternion, model.quaternion);
+        }
 
-      // Calculate new scroll position based on model rotation
-      const rotationSpeed = 0.001;
-      const newScrollY = model.rotation.x / rotationSpeed;
-      
-      // Animate scrolling to the new position
-      scrollToPosition(newScrollY);
-  }
+        previousMousePosition = {
+            x: event.clientX,
+            y: event.clientY
+        };
+    }
 
-  function scrollToPosition(scrollY) {
-      window.scrollTo({
-          top: scrollY,
-          behavior: 'smooth' // Add smooth scrolling behavior
-      });
-  }
-}, undefined, function (e) {
-  console.error(e);
-});
+    function onMouseDown(event) {
+        isDragging = true;
+    }
 
+    function onMouseUp(event) {
+        isDragging = false;
+    }
 
+    function toRadians(angle) {
+        return angle * (Math.PI / 180);
+    }
 
+    window.addEventListener('mousemove', onMouseMove, false);
+    window.addEventListener('mousedown', onMouseDown, false);
+    window.addEventListener('mouseup', onMouseUp, false);
 
+},);
+
+//lighting
 const light = new THREE.AmbientLight(0xffffff); // soft white light
-light.intensity = 3;
+light.intensity = 1;
 
+const pointLight = new THREE.PointLight(0xffffff, 1); // color, intensity
+pointLight.position.set(0, 100, 500); // Set position
+pointLight.castShadow = true; // Optionally, you can add shadows to the light
+
+app.scene.add(pointLight); // Add the point light to the scene
 app.scene.add(light);
